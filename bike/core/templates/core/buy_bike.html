@@ -1,0 +1,187 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/css/buybike.css' %}">
+
+<div class="market-wrap container-grid">
+  <aside class="filters">
+    <h3 class="filters-title">Filter</h3>
+
+    <!-- Budget -->
+    <div class="filter-block">
+      <div class="filter-head">
+        <span>Budget</span>
+        <button type="button" class="toggle-btn" data-target="#budgetPanel" aria-expanded="false" aria-controls="budgetPanel">⌄</button>
+      </div>
+      <div class="filter-panel" id="budgetPanel">
+        <div class="range-inputs">
+          <input type="number" id="minPrice" class="num-input" value="{{ query.min_price|default:'10000' }}">
+          <span class="dash">—</span>
+          <input type="number" id="maxPrice" class="num-input" value="{{ query.max_price|default:'200000' }}">
+        </div>
+        <input type="range" id="priceRange" min="0" max="500000" step="1000" value="{{ query.max_price|default:'200000' }}">
+        <div class="minmax-labels"><span>Minimum</span><span>Maximum</span></div>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="filter-block">
+      <div class="filter-head">
+        <span>Categories</span>
+        <button type="button" class="toggle-btn" data-target="#categoriesPanel" aria-expanded="false" aria-controls="categoriesPanel">⌄</button>
+      </div>
+      <div class="filter-panel" id="categoriesPanel">
+        <div class="cat-grid">
+          <label class="cat-item">
+            <input type="checkbox" name="category" value="scooter" class="cat-checkbox" {% if 'scooter' in selected_categories %}checked{% endif %}>
+            <div class="cat-icon scooter"></div><div class="cat-label">Scooty</div>
+          </label>
+
+          <label class="cat-item">
+            <input type="checkbox" name="category" value="motorbike" class="cat-checkbox" {% if 'motorbike' in selected_categories %}checked{% endif %}>
+            <div class="cat-icon motorbike"></div><div class="cat-label">Motor bike</div>
+          </label>
+
+          <label class="cat-item">
+            <input type="checkbox" name="category" value="ev" class="cat-checkbox" {% if 'ev' in selected_categories %}checked{% endif %}>
+            <div class="cat-icon ev"></div><div class="cat-label">EVs</div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brand -->
+    <div class="filter-block">
+      <div class="filter-head">
+        <span>Brand</span>
+        <button type="button" class="toggle-btn" data-target="#brandPanel" aria-expanded="false" aria-controls="brandPanel">⌄</button>
+      </div>
+      <div class="filter-panel" id="brandPanel">
+        <ul class="brand-list">
+          {% for b in available_brands %}
+            <li><label><input type="checkbox" name="brand" value="{{ b }}" class="brand-checkbox" {% if b in selected_brands %}checked{% endif %}> {{ b }}</label></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Year -->
+    <div class="filter-block">
+      <div class="filter-head">
+        <span>Year</span>
+        <button type="button" class="toggle-btn" data-target="#yearPanel" aria-expanded="false" aria-controls="yearPanel">⌄</button>
+      </div>
+      <div class="filter-panel" id="yearPanel">
+        <div class="range-inputs">
+          <input type="number" id="minYear" class="num-input" value="{{ query.min_year|default:'2007' }}">
+          <span class="dash">—</span>
+          <input type="number" id="maxYear" class="num-input" value="{{ query.max_year|default:'2025' }}">
+        </div>
+        <input type="range" id="yearRange" min="2000" max="2025" step="1" value="{{ query.max_year|default:'2025' }}">
+        <div class="minmax-labels"><span>Minimum Year</span><span>Maximum Year</span></div>
+      </div>
+    </div>
+
+    <!-- Kilometers -->
+    <div class="filter-block">
+      <div class="filter-head">
+        <span>Kilometers</span>
+        <button type="button" class="toggle-btn" data-target="#kmPanel" aria-expanded="false" aria-controls="kmPanel">⌄</button>
+      </div>
+      <div class="filter-panel" id="kmPanel">
+        <label>Under <input type="number" id="maxKm" class="num-input" value="{{ query.max_km|default:'100000' }}"> Km</label>
+        <input type="range" id="kmRange" min="0" max="200000" step="1000" value="{{ query.max_km|default:'100000' }}">
+      </div>
+    </div>
+
+    <!-- EngineTrim CC -->
+    <div class="filter-block">
+      <div class="filter-head">
+        <span>EngineTrim CC</span>
+        <button type="button" class="toggle-btn" data-target="#ccPanel" aria-expanded="false" aria-controls="ccPanel">⌄</button>
+      </div>
+      <div class="filter-panel" id="ccPanel">
+        <ul class="cc-list">
+          <li><label><input type="radio" name="cc" value="below100" {% if selected_cc == 'below100' %}checked{% endif %}> Below 100 CC</label></li>
+          <li><label><input type="radio" name="cc" value="below200" {% if selected_cc == 'below200' %}checked{% endif %}> Below 200 CC</label></li>
+          <li><label><input type="radio" name="cc" value="below300" {% if selected_cc == 'below300' %}checked{% endif %}> Below 300 CC</label></li>
+          <li><label><input type="radio" name="cc" value="below400" {% if selected_cc == 'below400' %}checked{% endif %}> Below 400 CC</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Fuel & Color (simple) -->
+    <div class="filter-block">
+      <div class="filter-head"><span>Fuel Type</span><button type="button" class="toggle-btn" data-target="#fuelPanel" aria-expanded="false" aria-controls="fuelPanel">⌄</button></div>
+      <div class="filter-panel" id="fuelPanel">
+        <label><input type="checkbox" name="fuel" value="petrol" {% if 'petrol' in selected_fuel %}checked{% endif %}> Petrol</label><br>
+        <label><input type="checkbox" name="fuel" value="diesel" {% if 'diesel' in selected_fuel %}checked{% endif %}> Diesel</label><br>
+        <label><input type="checkbox" name="fuel" value="electric" {% if 'electric' in selected_fuel %}checked{% endif %}> Electric</label>
+      </div>
+    </div>
+
+    <!-- Submit filters -->
+    <div class="filter-actions">
+      <button id="applyFilters" class="btn primary">Apply Filters</button>
+      <a href="{% url 'buy-bike' %}" class="btn link">Reset</a>
+    </div>
+  </aside>
+
+  <section class="products">
+    <div class="products-head">
+      <div class="left">
+        <strong>{{ total_count }}</strong> Bikes In <span class="location-info">{{ query.location|default:"Tamil Nadu" }}</span>
+      </div>
+      <div class="right">
+  <div class="sort-control" aria-label="Sort bikes">
+    <label for="sortSelect" class="sort-label">Sort By</label>
+    <div class="sort-select-wrapper">
+      <select id="sortSelect" name="sort" aria-label="Sort bikes">
+        <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest First</option>
+        <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price Low → High</option>
+        <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price High → Low</option>
+        <option value="alpha" {% if selected_sort == 'alpha' %}selected{% endif %}>Alphabetical</option>
+      </select>
+      <svg class="sort-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+    </div>
+
+    <div class="products-grid">
+      {% for bike in bikes %}
+      <article class="product-card">
+        <a class="card-link" href="{{ bike.get_absolute_url }}">
+          <div class="card-image">
+            {% if bike.is_booked %}
+              <span class="badge booked">Booked</span>
+            {% endif %}
+            {% if bike.main_image %}
+              <img src="{{ bike.main_image.url }}" alt="{{ bike.brand }} {{ bike.model }}">
+            {% else %}
+              <div class="image-fake">No Image</div>
+            {% endif %}
+            <img class="logo-watermark" src="{% static 'core/images/logo.png' %}" alt="DriveRP logo">
+          </div>
+
+          <div class="card-body">
+            <div class="title">{{ bike.make_year }} | {{ bike.brand }} {{ bike.model }} | {{ bike.variant }}</div>
+            <div class="meta">
+              <span class="km"><img src="{% static 'core/images/km.png' %}" alt="km" class="icon"> {{ bike.kilometers }} Km • {{ bike.fuel_type|capfirst }} • {{ bike.previous_owner }} Owner</span>
+            </div>
+            <div class="price">₹ {{ bike.price|intcomma }}</div>
+            <div class="location"><img src="{% static 'core/images/location.png' %}" class="icon"> {{ bike.location }}</div>
+          </div>
+        </a>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+<script src="{% static 'core/js/buybike.js' %}"></script>
+{% endblock %}

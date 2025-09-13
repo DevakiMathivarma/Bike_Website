@@ -1,0 +1,104 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/css/bike_payment.css' %}">
+
+<div class="payment-container" role="main" aria-labelledby="pay-heading">
+  <!-- Left Side -->
+  <div class="payment-left slide-in-left" id="paymentMethods">
+    <h2 id="pay-heading">Select Payment Method</h2>
+
+    <div class="pm-row">
+      <label class="pm-label">
+        <span class="pm-text">Credit/Debit Card</span>
+        <span class="pm-control">
+          <input type="radio" name="pay" value="card" class="pm-radio">
+          <span class="pm-circle" aria-hidden="true"></span>
+        </span>
+      </label>
+    </div>
+
+    <div class="pm-row">
+      <label class="pm-label">
+        <span class="pm-text">NetBanking</span>
+        <span class="pm-control">
+          <input type="radio" name="pay" value="netbanking" class="pm-radio">
+          <span class="pm-circle" aria-hidden="true"></span>
+        </span>
+      </label>
+    </div>
+
+    <div class="pm-row">
+      <label class="pm-label">
+        <span class="pm-text"><img src="{% static 'core/images/gpay.png' %}" class="icon"> GPay</span>
+        <span class="pm-control">
+          <input type="radio" name="pay" value="gpay" class="pm-radio">
+          <span class="pm-circle" aria-hidden="true"></span>
+        </span>
+      </label>
+    </div>
+
+    <div class="pm-row">
+      <label class="pm-label">
+        <span class="pm-text"><img src="{% static 'core/images/paytm.png' %}" class="icon"> Paytm</span>
+        <span class="pm-control">
+          <input type="radio" name="pay" value="paytm" class="pm-radio">
+          <span class="pm-circle" aria-hidden="true"></span>
+        </span>
+      </label>
+    </div>
+
+    <div class="pm-row">
+      <label class="pm-label">
+        <span class="pm-text"><img src="{% static 'core/images/phonepe.png' %}" class="icon"> PhonePe</span>
+        <span class="pm-control">
+          <input type="radio" name="pay" value="phonepe" class="pm-radio">
+          <span class="pm-circle" aria-hidden="true"></span>
+        </span>
+      </label>
+    </div>
+
+    <div class="pm-row">
+      <label class="pm-label">
+        <span class="pm-text"><img src="{% static 'core/images/amazonpay.png' %}" class="icon"> AmazonPay</span>
+        <span class="pm-control">
+          <input type="radio" name="pay" value="amazonpay" class="pm-radio">
+          <span class="pm-circle" aria-hidden="true"></span>
+        </span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Right Side -->
+  <div class="payment-right slide-in-right">
+    <h3>Summary</h3>
+    <p>Subtotal: ₹{{ bike.price }}</p>
+
+    {# Simple GST calc — show as number (5% of price). adjust as needed #}
+    {% with gst=bike.price|floatformat:2 %}
+      {% with gst_amount=bike.price|floatformat:2 %}
+        <p>GST (5%): ₹{{ bike.price|floatformat:2|floatformat:"0"|add:"0" }}</p>
+      {% endwith %}
+    {% endwith %}
+
+    <p>Test Drive: ₹1000</p>
+    <h4>Total: ₹{{ bike.price|add:"1000" }}</h4>
+
+    <div class="payment-actions">
+      <button id="confirmBtn" class="btn confirm-btn" type="button">Confirm Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Success Popup (hidden by default) -->
+<div id="successModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal-content success" role="document">
+    <img src="{% static 'core/images/success.png' %}" alt="success" class="success-illustration">
+    <h2>Booking Confirmed</h2>
+    <p>The Bike is Yours! Enjoy Your Journey 🚴</p>
+    <button id="successClose" class="btn">OK</button>
+  </div>
+</div>
+
+<script src="{% static 'core/js/bike_payment.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/css/sell_bike.css' %}">
+
+<!-- HERO -->
+<section class="sell-hero">
+  {% if banner and banner.image %}
+    <div class="hero-bg" style="background-image:url('{{ banner.image.url }}')"></div>
+  {% else %}
+    <div class="hero-bg" style="background-image:url('{% static "core/images/hero-bike.jpg" %}')"></div>
+  {% endif %}
+  <div class="hero-overlay container">
+    <div class="hero-text">
+      <div class="line line-1">{{ banner.title_line_1|default:"Every bike has" }}</div>
+      <div class="line line-2">{{ banner.title_line_2|default:"another adventure" }}</div>
+      <div class="line line-3">{{ banner.title_line_3|default:"left in it." }}</div>
+      <p class="sub">{{ banner.subtitle|default:"Pass it on to the next rider." }}</p>
+    </div>
+  </div>
+</section>
+<!-- SELL FAST -->
+<section class="sell-fast container">
+  <div class="sell-fast-card">
+    <div class="sell-fast-head">
+      <div class="sell-fast-title">Sell Fast By
+        <img src="{% static 'core/images/logo.png' %}" alt="DriveRP" class="logo-sm">
+      </div>
+    </div>
+
+    <div class="sell-form-wrap">
+      <form id="sellForm" class="sell-form" autocomplete="off" method="post" novalidate>
+        {% csrf_token %}
+
+        <!-- Single segmented bar -->
+        <div class="form-bar" role="group" aria-label="Sell form">
+          
+          <!-- BRAND -->
+          <button type="button" class="seg pseudo seg-first" data-name="brand">
+            Brand Name
+            <div class="popup-list popup-brand" data-field="brand" aria-hidden="true">
+              <input class="popup-search" placeholder="Enter Your Bike brand">
+              <h4>Other Brands</h4>
+              <ul class="list">
+                <li>TVS</li><li>Vespa</li><li>Yamaha</li><li>Royal Enfield</li>
+                <li>Suzuki</li><li>KTM</li><li>Bajaj</li><li>Hero</li><li>Hero Honda</li>
+              </ul>
+            </div>
+          </button>
+
+          <!-- MODEL -->
+          <button type="button" class="seg pseudo" data-name="model">
+            Model
+            <div class="popup-list popup-model" data-field="model" aria-hidden="true">
+              <input class="popup-search" placeholder="Enter Model">
+              <h4>Model</h4>
+              <ul class="list">
+                <li>Avenger</li><li>Boxer</li><li>Chetak</li><li>CT100</li><li>CT110</li>
+                <li>Discover</li><li>Platina</li><li>Pulsar</li>
+              </ul>
+            </div>
+          </button>
+
+          <!-- VARIANT -->
+          <button type="button" class="seg pseudo" data-name="variant">
+            Variant
+            <div class="popup-list popup-variant" data-field="variant" aria-hidden="true">
+              <input class="popup-search" placeholder="Enter Variant">
+              <h4>Variant</h4>
+              <ul class="list">
+                <li>125CC Split Seat Disc BS6</li><li>150CC</li><li>150CC ABS</li>
+                <li>180CC Neon ABS</li><li>ABS 220F</li>
+              </ul>
+            </div>
+          </button>
+
+          <!-- YEAR -->
+          <button type="button" class="seg pseudo" data-name="year">
+            Year
+            <div class="popup-list popup-year" data-field="year" aria-hidden="true">
+              <input class="popup-search" placeholder="Enter Year">
+              <h4>Year</h4>
+              <ul class="list" id="yearList"></ul>
+            </div>
+          </button>
+
+          <!-- KMS -->
+          <button type="button" class="seg pseudo" data-name="kms">
+            KMs Driven
+            <div class="popup-list popup-kms" data-field="kms" aria-hidden="true">
+              <h4>Select KM Range</h4>
+              <ul class="list">
+                <li>1 - 5000</li><li>5001 - 10000</li><li>10001 - 20000</li>
+                <li>20001 - 50000</li><li>50001 - 100000</li>
+                <li>100001 - 150000</li><li>150001 - 200000</li>
+              </ul>
+            </div>
+          </button>
+
+          <!-- OWNER -->
+          <button type="button" class="seg pseudo" data-name="owner">
+            Owner
+            <div class="popup-list popup-owner" data-field="owner" aria-hidden="true">
+              <h4>Select Owner</h4>
+              <ul class="list">
+                <li>1st Owner</li><li>2nd Owner</li><li>3rd Owner</li>
+                <li>4th Owner</li><li>5th Owner</li>
+              </ul>
+            </div>
+          </button>
+
+          <!-- GET PRICE -->
+          <button type="button" id="getPrice" class="seg get-price">Get Price</button>
+        </div>
+
+        <!-- Hidden inputs -->
+        <input type="hidden" name="brand" id="input_brand">
+        <input type="hidden" name="model" id="input_model">
+        <input type="hidden" name="variant" id="input_variant">
+        <input type="hidden" name="year" id="input_year">
+        <input type="hidden" name="kms" id="input_kms">
+        <input type="hidden" name="owner" id="input_owner">
+
+        <div class="extra">
+          <input type="text" name="name" id="seller_name" placeholder="Your name (optional)">
+          <input type="tel" name="phone" id="seller_phone" placeholder="Phone (optional)">
+        </div>
+      </form>
+
+      <div class="cant-find">Can't find what you're looking for? <a href="{% url 'contact' %}">Click Here</a></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works container">
+  <h2 class="hiw-title">How it Works</h2>
+  <div class="hiw-grid">
+    <div class="hiw-card">
+      <img src="{% static 'core/images/valuation.png' %}" alt="valuation">
+      <h4>Check Bike Valuation</h4>
+    </div>
+    <div class="hiw-arrow">&lt;</div>
+    <div class="hiw-card">
+      <img src="{% static 'core/images/inspection.png' %}" alt="inspection">
+      <h4>Doorstep Inspection</h4>
+    </div>
+    <div class="hiw-arrow">&lt;</div>
+    <div class="hiw-card">
+      <img src="{% static 'core/images/payment.png' %}" alt="payment">
+      <h4>Instant Payment</h4>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE POPUP -->
+<div id="sellModal" class="sell-modal" aria-hidden="true">
+  <div class="sell-modal-panel">
+    <button id="sellClose" class="modal-close">✕</button>
+    <div class="quote-ill"><img src="{% static 'core/images/offer.png' %}" alt="offer"></div>
+    <h3 id="quoteTitle">Estimated Price</h3>
+    <p id="quoteText" class="quote-text">—</p>
+    <div class="quote-actions">
+      <a href="{% url 'contact' %}" class="btn outline">Contact Us</a>
+      <button id="quoteOk" class="btn primary">OK</button>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'core/js/sell_bike.js' %}"></script>
+{% endblock %}

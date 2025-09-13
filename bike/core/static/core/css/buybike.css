@@ -1,0 +1,237 @@
+/* buybike.css - sidebar + cards (updated - image cover + collapsed panels + arrow animation) */
+.container-grid{ display:flex; gap:24px; align-items:flex-start;  max-width:1200px; margin:0 auto; }
+.filters{ width:280px; background:#e6f2f8; padding:18px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.04); }
+.filters-title{ font-size:20px; font-weight:700; margin-bottom:8px; }
+.filter-block{ margin-bottom:18px; }
+
+/* header */
+.filter-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding:12px 6px;
+}
+.filter-head span{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* toggle button (arrow) */
+.toggle-btn{
+  background:none;
+  border:0;
+  font-size:28px;
+  cursor:pointer;
+  font-weight:700;
+  transform-origin: 50% 50%;
+  transition: transform .18s ease;
+  line-height:1;
+}
+
+/* rotate when expanded via aria-expanded */
+.toggle-btn[aria-expanded="true"]{
+  transform: rotate(180deg);
+}
+
+/* When panel hidden -> default */
+.filter-panel {
+  display: none;          /* default closed */
+  margin-top: 12px;
+  padding: 6px 0;
+  transition: all .18s ease;
+}
+.filter-panel.open {
+  display: block;
+}
+
+/* Sort control styling */
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* label */
+.sort-label {
+  display: inline-block;
+  font-size: 15px;
+}
+
+/* wrapper to style native select visually */
+.sort-select-wrapper {
+  position: relative;
+  display: inline-block;
+  min-width: 200px;
+  max-width: 320px;
+}
+
+/* nice pill-styled select */
+.sort-select-wrapper select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+  padding: 8px 40px 8px 14px;
+  border-radius: 24px;
+  border: 0;
+  background: linear-gradient(90deg, #0b5fa5, #0b7fb3);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(11,95,165,0.12);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* lighter styling for small screens */
+@media (max-width: 640px) {
+  .sort-select-wrapper { min-width: 150px; }
+  .sort-control { gap: 8px; }
+  .sort-label { font-size: 14px; }
+  .sort-select-wrapper select { padding: 8px 36px 8px 10px; font-size:13px }
+}
+
+/* chevron icon (right side) */
+.sort-chevron {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  fill: rgba(255,255,255,0.95);
+  pointer-events: none;
+  opacity: 0.96;
+}
+
+/* focus state for keyboard users */
+.sort-select-wrapper select:focus {
+  outline: 3px solid rgba(11,95,165,0.18);
+  outline-offset: 2px;
+  box-shadow: 0 10px 28px rgba(11,95,165,0.14);
+}
+
+
+/* inputs */
+.range-inputs{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+.num-input{ width:100px; padding:8px; background:white; border-radius:4px; border:0; box-shadow:0 2px 6px rgba(0,0,0,0.06); font-weight:700; }
+.dash{ color:black; font-weight:700; }
+.minmax-labels{ display:flex; justify-content:space-between; font-weight:700; margin-top:6px; }
+.cat-grid{ display:flex; gap:8px; align-items:center; }
+.cat-item{ display:flex; flex-direction:column; align-items:center; width:70px; text-align:center; }
+.cat-icon{ width:70px; height:70px; background:#fff; border-radius:10px; margin-bottom:6px; display:flex; align-items:center; justify-content:center; font-size:28px; }
+.cat-label{ font-weight:700; font-size:14px; }
+.cat-icon.scooter::before{ content:"🛵"; }
+.cat-icon.motorbike::before{ content:"🏍️"; font-size:30px; }
+.cat-icon.ev::before{ content:"🔋"; font-size:28px; }
+
+.brand-list{ list-style:none; padding:0; margin:0; }
+.brand-list li{ padding:6px 0; font-weight:700; }
+
+.filter-actions{ display:flex; gap:8px; margin-top:12px; }
+.btn.primary{ background:#0b5fa5; color:#fff; padding:10px 12px; border-radius:8px; border:0; cursor:pointer; }
+.btn.link{ background:transparent; color:#0b5fa5; padding:10px 12px; border-radius:8px; text-decoration:none; }
+
+/* ---------- product column ---------- */
+.products{ flex:1; }
+.products-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+
+/* grid */
+.products-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:18px; }
+
+/* card container: overflow hidden so image reaches rounded corners */
+.product-card {
+  background: #e8fbff;
+  border-radius: 12px;
+  overflow: hidden;       /* critical so image touches rounded border */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  transition: transform .18s ease, box-shadow .18s;
+}
+.product-card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.10); }
+
+/* card link */
+.card-link{ color:inherit; text-decoration:none; display:block; }
+
+/* image wrapper: keep fixed height, image will cover entire area */
+.card-image {
+  position: relative;
+  height: 220px;
+  display: block;
+  background: linear-gradient(180deg,#dff3fb,#e6fbff);
+  border: 0;
+}
+
+/* image fills wrapper entirely */
+.card-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
+}
+
+/* watermark on top-right */
+/* watermark: small, top-left, never stretch */
+.card-image .logo-watermark,
+.main-img .logo-watermark {
+  position: absolute;
+  top: 8px;
+  right: 8px;               /* top-left placement */
+          /* ensure not conflicting with right */
+  width: 100px;             /* maximum width */
+  height: 300px;            /* keep aspect ratio */
+  max-height: 100px;        /* never taller than 48px */
+  opacity: 0.9;
+  z-index: 50;
+  pointer-events: none;    /* won't capture clicks */
+  object-fit: cover;     /* keep logo contained without distortion */
+  -webkit-user-drag: none;
+  
+}
+
+/* safety: if logo is an <img> inside .card-image, ensure it doesn't blow up */
+.card-image img.logo-watermark,
+.main-img img.logo-watermark {
+  display: block;
+  width: 150px;
+  height: 100px;
+  max-height: 40px;
+}
+
+/* ensure card clipping still applies (keeps watermark inside the rounded card) */
+.product-card, .main-img {
+  overflow: hidden;
+  position: relative; /* ensure absolute children positioned correctly */
+}
+
+/* detail: slightly larger logo on detail page if you prefer */
+.detail-container .main-img .logo-watermark {
+  width: 84px;
+  max-height: 64px;
+  top: 10px;
+  right: 10px;
+}
+
+/* booked badge */
+.badge.booked{ position:absolute; left:8px; top:8px; z-index:4; background:#e53e3e; color:white; padding:6px 10px; border-radius:6px; font-weight:700; }
+
+.card-body{ padding:13px; }
+.title{ font-weight:700; margin-bottom:14px; text-align: center;font-size: 19px;}
+.meta{ font-size:16px; color:#233; margin-bottom:14px; display:flex;  gap:2px;white-space: nowrap;text-overflow: ellipsis;;}
+.icon{ width:30px; height:30px; vertical-align:middle; margin-right:6px; }
+.price{ font-weight:800; font-size:22px; margin-bottom:6px;text-align: center; }
+.location{ color:#0f172a; font-size:19px; display:flex; align-items:center; gap:2px;font-weight: 600; }
+
+/* responsiveness */
+@media (max-width: 1000px){
+  .products-grid{ grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 640px){
+  .container-grid{ flex-direction:column; padding:12px; }
+  .filters{ width:100%; order:2; }
+  .products{ order:1; }
+  .products-grid{ grid-template-columns: repeat(1,1fr); }
+}

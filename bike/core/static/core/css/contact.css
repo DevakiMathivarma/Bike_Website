@@ -1,0 +1,141 @@
+/* contact.css - simple, clean layout matching screenshots */
+:root{
+  --accent:#083a45; /* deep teal */
+  --field-border:#333;
+  --field-radius:14px;
+  --bg:#ffffff;
+  --muted:#777;
+  --container-width:1100px;
+}
+
+*{box-sizing:border-box}
+body { font-family: "Poppins", Arial, sans-serif; color:#0b2b2f; }
+
+.contact-section{
+  max-width:var(--container-width);
+  margin:30px auto;
+  padding:10px 16px 60px;
+}
+
+.page-title{
+  text-align:center;
+  color:var(--accent);
+  margin-bottom:18px;
+  font-weight:700;
+  font-size:20px;
+}
+
+/* two-column grid */
+.contact-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:28px;
+  align-items:start;
+}
+
+/* Left form */
+.contact-left {
+  padding-right:10px;
+}
+
+.field-wrap{
+  margin-bottom:16px;
+}
+
+/* common input styling */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea{
+  width:100%;
+  padding:14px 18px;
+  border-radius:var(--field-radius);
+  border:2px solid #bfbfbf;
+  font-size:16px;
+  outline:none;
+  background:var(--bg);
+  box-shadow:none;
+  transition:none;
+}
+
+/* placeholder-only styling (no labels visible) */
+input::placeholder,
+textarea::placeholder {
+  color:#222;
+  font-weight:600;
+}
+
+/* make selects look like big pill buttons */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #004b57 50%),
+                    linear-gradient(135deg, #004b57 50%, transparent 50%);
+  background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right:42px;
+  font-weight:700;
+}
+
+/* big textarea */
+textarea {
+  min-height:120px;
+  resize:vertical;
+  font-weight:600;
+}
+
+/* Primary button */
+.primary-btn{
+  background:var(--accent);
+  color:white;
+  padding:10px 22px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* Right column - map */
+.contact-right {
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+/* map container with border radius and small inner map */
+.map-wrap{
+  border-radius:12px;
+  overflow:hidden;
+  border:2px solid #e6e6e6;
+  min-height:280px;
+}
+
+/* iframe takes full available height */
+.map-frame{
+  width:100%;
+  height:320px;
+  border:0;
+  display:block;
+}
+
+/* address block under map */
+.address-block{
+  margin-top:6px;
+  padding:10px 6px;
+  font-size:15px;
+  color:#111;
+}
+.address-block h3{ margin:4px 0 8px; font-size:14px; font-weight:700; color:var(--accent) }
+.address-block .addr-line{ margin:0; line-height:1.25; font-weight:600; }
+.address-block .addr-link{ margin-top:8px; font-weight:600; display:flex; align-items:center; gap:8px }
+
+.icon{ font-size:16px; }
+
+/* Responsive */
+@media(max-width:880px){
+  .contact-grid{ grid-template-columns: 1fr; }
+  .map-frame{ height:240px; }
+}

@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/css/auth.css' %}">
+
+<div class="auth-wrapper container">
+  <div class="auth-grid">
+
+    <!-- left image -->
+    <div class="auth-left" aria-hidden="true">
+      <div class="image-frame">
+        <img src="{% static 'core/images/login-bike.jpg' %}" alt="Bike" class="auth-bike">
+      </div>
+    </div>
+
+    <!-- right form -->
+    <div class="auth-right" role="main" aria-labelledby="login-heading">
+      <h2 id="login-heading" class="auth-title">Log in</h2>
+
+      {% if error %}
+      <div class="alert error" role="alert">{{ error }}</div>
+      {% endif %}
+
+      <form id="loginForm" method="post" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next|default:'/' }}">
+
+        <label for="username">User Name</label>
+        <input id="username" name="username" type="text" inputmode="text" autocomplete="username" placeholder="Enter your name" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" required>
+
+        <div class="row small">
+          <a href="#" class="forgot">Forgot Password</a>
+        </div>
+
+        <div id="formFeedback" class="form-feedback" aria-live="polite"></div>
+
+        <button id="submitLogin" type="submit" class="btn login-submit">Log in</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'core/js/login.js' %}"></script>
+{% endblock %}

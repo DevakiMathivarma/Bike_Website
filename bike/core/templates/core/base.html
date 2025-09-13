@@ -1,0 +1,175 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>DriveRP - second hand bikes</title>
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="site-header" id="pageHeader">
+        <nav class="navbar container">
+            <div class="brand" id="brand" data-left-color="{{ brand.left_color|default:'#2b8ecb' }}"
+                data-right-color="{{ brand.right_color|default:'#ff6b6b' }}">
+                <a href="{% url 'home' %}" class="brand-link brand-script" aria-label="DriveRP">
+                    <span class="script-left">{{ brand.left_text }}</span>
+                    <span class="script-right">{{ brand.right_text }}</span>
+                </a>
+                <a href="{% url 'home' %}" class="brand-link brand-simple" aria-label="DriveRP" style="display:none;">
+                    <span class="simple-left">{{ brand.left_text }}</span>
+                    <span class="simple-right">{{ brand.right_text }}</span>
+                </a>
+            </div>
+
+            <button id="menuToggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <!-- nav-links will morph into drawer on mobile -->
+            <!-- nav-links: NOTE: no aria-hidden here. We'll update aria-modal dynamically -->
+            <ul class="nav-links" id="navLinks" role="dialog" aria-modal="false" aria-label="Main menu">
+                <!-- inside your nav-links -->
+                <button id="menuClose" class="menu-close" type="button" aria-label="Close menu" title="Close">✕</button>
+
+                <!-- menu items ... -->
+
+
+                <!-- optional drawer header (brand inside drawer) -->
+                <div class="drawer-header" aria-hidden="true" style="display:none;">
+                    <!-- small brand copy for drawer if needed -->
+                </div>
+
+                {% for item in navitems %}
+                <li class="nav-item" role="none">
+                    <a href="{{ item.url }}" class="nav-link" role="menuitem">{{ item.title }}</a>
+                </li>
+                {% endfor %}
+
+
+                <div class="nav-controls">
+                   {% if user.is_authenticated %}
+  <a href="{% url 'logout' %}" class="btn login-btn">Logout</a>
+{% else %}
+  <a href="{% url 'login' %}?next={{ request.path }}" class="btn login-btn">Login</a>
+{% endif %}
+
+                    <button class="icon-btn search-btn" aria-label="Search">
+                        🔍
+                    </button>
+                </div>
+            </ul>
+
+
+        </nav>
+    </header>
+
+    <!-- overlay sits above page content, below drawer -->
+    <div id="mobileOverlay" class="mobile-overlay" tabindex="-1" aria-hidden="true"></div>
+
+    <main class="main-content container">
+        {% block content %}{% endblock %}
+    </main>
+
+
+    <footer class="site-footer">
+  <div class="footer-inner container-xl">
+
+    <!-- COL 1: Logo + social -->
+    <div class="fcol fcol-logo">
+      <div class="logo-wrap" aria-hidden="true">
+        <!-- big decorative logo image -->
+        <img src="{% static 'core/images/logo.png' %}" alt="DriveRP" class="footer-logo">
+      </div>
+
+      <div class="get-in-touch">
+        <div class="get-title">Get in touch</div>
+        <div class="social-icons" role="navigation" aria-label="social links">
+          <a href="https://wa.me/919879521234" target="_blank" rel="noopener" class="social" title="WhatsApp">
+            <img src="{% static 'core/images/what.PNG' %}" alt="WhatsApp">
+          </a>
+          <a href="https://www.youtube.com/" target="_blank" rel="noopener" class="social" title="YouTube">
+            <img src="{% static 'core/images/you.PNG' %}" alt="YouTube">
+          </a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener" class="social" title="Instagram">
+            <img src="{% static 'core/images/insta.PNG' %}" alt="Instagram">
+          </a>
+          <a href="https://www.facebook.com/" target="_blank" rel="noopener" class="social" title="Facebook">
+            <img src="{% static 'core/images/face.PNG' %}" alt="Facebook">
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 2: Quick links -->
+    <div class="fcol fcol-links">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <ul>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'about' %}">About Us</a></li>
+          <li><a href="{% url 'contact' %}">Contact Us</a></li>
+          <li><a href="{% url 'buy-bike' %}">Buy Bike</a></li>
+          <li><a href="{% url 'sell-bike' %}">Sell Bike</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- COL 3: Categories + bike carousel -->
+    <div class="fcol fcol-cats">
+      <div class="cats-and-carousel">
+        <div class="cats-list">
+          <ul>
+            <li>Electric Two-Wheelers</li>
+            <li>Motorcycles</li>
+            <li>Scooters</li>
+            <li>Mopeds</li>
+            <li>ATV</li>
+            <li>Custom Bikes</li>
+          </ul>
+        </div>
+
+        <div class="bike-carousel" aria-hidden="true">
+          <div class="bike-slide active">
+            <img src="{% static 'core\images\image 88 (1).png' %}" alt="Bike 1">
+          </div>
+          <div class="bike-slide">
+            <img src="{% static 'core\images\image 88.png' %}" alt="Bike 2">
+          </div>
+          <div class="bike-slide">
+            <img src="{% static 'core\images\image_88__2_-removebg-preview.png' %}" alt="Bike 3">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 4: Address & contact -->
+    <div class="fcol fcol-address">
+      <h4>Address:</h4>
+      <address>
+        <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=51+Rajaji+Street+GST+Road+Chengalpattu" target="_blank" rel="noopener">
+          51, Rajaji Street,<br>GST Road,<br>Chengalpattu-603104,<br>TamilNadu, India.
+        </a>
+      </address>
+
+      <div class="footer-links">
+        <a href="https://www.driveRp.in" target="_blank" rel="noopener" class="site-link">www.DriveRp.in</a>
+        <a href="tel:+919879521234" class="phone-link">+91 987 952 1234</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <small>© {{ now.year }} DriveRP — All rights reserved.</small>
+  </div>
+</footer>
+    <script src="{% static 'core/js/base.js' %}"></script>
+</body>
+
+</html>

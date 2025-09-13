@@ -1,0 +1,103 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/css/about.css' %}">
+<script defer src="{% static 'core/js/about.js' %}"></script>
+
+<section class="about-page container-xl">
+  <!-- TOP: two-column hero -->
+  <div class="about-hero">
+    <div class="hero-left">
+      {% if about and about.hero_image %}
+        <img src="{{ about.hero_image.url }}" alt="About hero" class="hero-image" />
+      {% else %}
+        <img src="{% static 'images/about-hero-placeholder.jpg' %}" alt="About hero" class="hero-image" />
+      {% endif %}
+    </div>
+
+    <div class="hero-right">
+      <h2 class="section-title">
+        {% if about %}
+          {{ about.intro_heading }}
+        {% else %}
+          About Us
+        {% endif %}
+      </h2>
+      {% if about and about.intro_paragraph %}
+        <div class="intro-html">{{ about.intro_paragraph|safe }}</div>
+      {% else %}
+        <p class="intro-paragraph">At <span class="highlight">Drive RP</span>, we're passionate about making cycling accessible and sustainable for everyone.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- SUCCESS banner with mission overlay -->
+  <div class="success-banner">
+    {% if about and about.success_image %}
+      <img src="{{ about.success_image.url }}" alt="Success banner" class="success-image" />
+    {% else %}
+      <img src="{% static 'images/success-placeholder.jpg' %}" alt="Success banner" class="success-image" />
+    {% endif %}
+
+    <div class="mission-card js-animate"
+         style="--overlay-opacity: {% if about %}{{ about.mission_overlay_opacity|default:0.95 }}{% else %}0.95{% endif %}">
+      <h4 class="mission-title">
+        {% if about %}
+          {{ about.mission_title }}
+        {% else %}
+          Our Mission
+        {% endif %}
+      </h4>
+      <p class="mission-text">
+        {% if about %}
+          {{ about.mission_text }}
+        {% else %}
+          Our mission is to make cycling more accessible...
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <!-- Approach section -->
+  <div class="approach-section">
+    <div class="approach-left js-animate">
+      <h3 class="approach-heading">
+        {% if about %}
+          {{ about.approach_heading }}
+        {% else %}
+          Our Approach
+        {% endif %}
+      </h3>
+      <p class="approach-paragraph">
+        {% if about %}
+          {{ about.approach_paragraph }}
+        {% else %}
+          We believe buying or selling a secondhand bike should be simple...
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="approach-right">
+      <div class="approach-grid">
+        {% comment %}
+        We expect up to 5 images - we'll place them into specific grid slots.
+        {% endcomment %}
+
+        {% if approach_images %}
+          {% for img in approach_images %}
+            <div class="grid-item js-image" data-order="{{ forloop.counter }}">
+              <img src="{{ img.image.url }}" alt="{{ img.caption|default:'Approach image' }}">
+            </div>
+          {% endfor %}
+        {% else %}
+          {# Fallback placeholders if no images uploaded #}
+          <div class="grid-item js-image"><img src="{% static 'images/placeholder-1.jpg' %}" alt="placeholder"></div>
+          <div class="grid-item js-image"><img src="{% static 'images/placeholder-2.jpg' %}" alt="placeholder"></div>
+          <div class="grid-item js-image"><img src="{% static 'images/placeholder-3.jpg' %}" alt="placeholder"></div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

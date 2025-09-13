@@ -1,0 +1,402 @@
+/* base.css - navbar styles (updated mobile drawer with close button) */
+:root{
+  --bg: #ffffff;
+  --muted: #6b7280;
+  --accent: #0f172a;
+  --link: #1f6feb;
+  --btn-bg: #0b5fa5;
+  --drawer-width: 320px;
+  --overlay-rgba: rgba(10, 14, 23, 0.28);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+.container{max-width:1200px;margin:0 auto;padding:0 10px;}
+
+/* header / navbar */
+.site-header{
+  background: var(--bg);
+  border-bottom: 1px solid rgba(16,24,40,0.04);
+  position: sticky;
+  top:0;
+  z-index:1200;
+  backdrop-filter: blur(4px);
+  animation: slideDown .28s ease;
+}
+
+@keyframes slideDown{
+  from{transform: translateY(-10px);opacity:0}
+  to{transform: translateY(0);opacity:1}
+}
+
+.navbar{
+  display:flex;
+  align-items:center;
+  gap: 18px;
+  height:72px;
+  position:relative;
+  padding:6px 0;
+}
+
+/* ---------- Logo Typography ---------- */
+.brand { position: relative; display:flex; align-items:center; gap:10px; padding:6px 10px; border-radius:10px; }
+
+/* hide simple by default; show script by default */
+.brand-simple { display: none; }
+
+/* read colors via CSS variables (JS will set them from data attributes) */
+.brand { --left-color: #2b8ecb; --right-color: #ff6b6b; }
+
+/* ---------- Option A: Script / Decorative Logo ---------- */
+.brand-script {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transform: translateZ(0);
+}
+
+/* the script font look */
+.brand-script .script-left,
+.brand-script .script-right {
+  font-family: "Pacifico", "Lobster", "Great Vibes", cursive;
+  font-size: 36px;
+  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0;
+  display:inline-block;
+  transform: skewX(-6deg) scale(1.02);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+.brand-script .script-left {
+  color: var(--left-color);
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.06),
+    0 6px 10px rgba(0,0,0,0.12);
+}
+
+.brand-script .script-right {
+  background: linear-gradient(90deg, #3a5cff 0%, #7d00ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow:
+    0 2px 0 rgba(0,0,0,0.06),
+    0 10px 18px rgba(0,0,0,0.14);
+}
+
+.brand-script::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  top: 6px;
+  bottom: -6px;
+  z-index: -1;
+  filter: blur(8px);
+  opacity: 0.55;
+  background: radial-gradient(circle at 30% 30%, rgba(92,200,220,0.35) 0%, rgba(140,80,255,0.18) 35%, transparent 55%);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.brand-script .script-left,
+.brand-script .script-right {
+  -webkit-text-stroke: 0.6px rgba(0,0,0,0.08);
+}
+
+/* nav */
+.nav-links{
+  list-style:none;
+  display:flex;
+  gap:18px;
+  margin:0;
+  padding:0;
+  flex:1;
+  justify-content:space-around;
+  align-items:center;
+}
+.nav-item{}
+.nav-link{
+  text-decoration:none;
+  color:black;
+  font-weight:600;
+  font-size: 19px;
+  padding:8px 12px;
+  border-radius:8px;
+  transition: all .18s ease;
+  position:relative;
+}
+
+/* active & hover effect */
+.nav-link:hover{
+  color:var(--link);
+  transform: translateY(-3px);
+}
+.nav-link.active{
+  color: white;
+  background: linear-gradient(90deg,var(--btn-bg), #0b8ac0);
+  box-shadow: 0 6px 18px rgba(11,95,165,0.16);
+}
+
+/* right controls */
+.nav-controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.btn{
+  padding:8px 50px;
+  border-radius:20px;
+  border:0;
+  color:white;
+  text-decoration:none;
+  font-weight:700;
+  background: linear-gradient(90deg,var(--btn-bg), #0b7fb3);
+  box-shadow: 0 6px 18px rgba(11,95,165,0.14);
+}
+.icon-btn{
+  background:transparent;border:0;padding:8px 20px;border-radius:8px;cursor:pointer;color:var(--muted)
+}
+
+/* menu toggle (mobile) */
+.menu-toggle{
+  display:none;
+  background:transparent;
+  border:0;
+  padding:8px;
+  cursor:pointer;
+  margin-left:auto;
+}
+.menu-toggle .bar{
+  display:block;
+  width:20px;height:2px;margin:4px 0;background:#121212;border-radius:2px;transition:all .18s;
+}
+
+/* ---------------- Mobile Drawer & Overlay ---------------- */
+/* overlay */
+.mobile-overlay{
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
+  transition: background .22s ease, opacity .22s;
+  opacity: 0;
+  z-index: 1190;
+}
+
+/* drawer (re-uses nav-links) */
+.nav-links {
+  /* default desktop layout above; drawer styles applied via media query */
+}
+
+/* close button placed inside drawer for small screens */
+.menu-close{
+  display:none;
+  border:0;
+  background:#fff;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  box-shadow: 0 6px 18px rgba(11,95,165,0.12);
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+  align-self:flex-end;
+}
+
+/* Small screens: convert nav to slide-in drawer */
+@media (max-width: 480px){
+  .menu-toggle{ display:block; }
+
+  /* hide inline center nav for mobile; we will restyle the same element as a drawer */
+  .nav-links{
+    display:flex;
+    flex-direction: column;
+    gap:10px;
+    padding: 18px;
+    position: fixed;
+    top: 0;
+    right: - (var(--drawer-width));
+    height: 100vh;
+    width: var(--drawer-width);
+    max-width: calc(100% - 48px);
+    background: linear-gradient(180deg, rgba(255,255,255,1), rgba(250,250,252,1));
+    box-shadow: -18px 40px 80px rgba(11,95,165,0.08);
+    border-radius: 12px 0 0 12px;
+    z-index: 1205;
+    transition: transform .32s cubic-bezier(.2,.9,.25,1), right .32s;
+    transform: translateX(110%);
+    padding-top: 72px; /* leave header height for comfortable spacing */
+    pointer-events: none;
+    opacity: 0;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    align-items: flex-start;
+  }
+
+  /* show close button inside drawer */
+  .menu-close{ display:block; position:absolute; right:12px; top:12px; background:white; }
+
+  /* menu shown state */
+  .nav-links.show{
+    transform: translateX(0);
+    right: 0;
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  /* overlay active state */
+  .mobile-overlay.active{
+    background: var(--overlay-rgba);
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  /* nav items vertical styles */
+  .nav-link{
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    color: var(--accent);
+    border-radius: 8px;
+  }
+  .nav-link.active{
+    color: white;
+    background: linear-gradient(90deg,var(--btn-bg), #0b8ac0);
+    box-shadow: 0 10px 30px rgba(11,95,165,0.14);
+  }
+
+  /* place login button inside drawer as well; hide nav-controls default to prevent overlap */
+  .nav-controls{ display:none; }
+
+  /* optional: show a small header row inside drawer with brand */
+  .drawer-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    padding: 0 12px 8px;
+  }
+  .drawer-header .brand { padding:0; }
+}
+
+/* small desktop adjustments */
+@media (min-width: 481px) and (max-width: 900px){
+  .nav-links{ gap:14px; justify-content:center }
+}
+
+/* simple main content spacing */
+.main-content{ padding:36px 0; color:var(--accent) }
+
+
+
+
+/* overall footer */
+.site-footer {
+  background: #0f4f56;    
+  color: #fff;
+  padding: 36px 16px 18px;
+  font-family: "Poppins", Arial, sans-serif;
+  border-top: 6px solid rgba(255,255,255,0.02);
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr 1.6fr 1fr;
+  gap: 28px;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* -------- COL 1: Logo & social -------- */
+.fcol-logo { display:flex; flex-direction:column; gap:18px; align-items:flex-start; }
+.logo-wrap { width: 320px; height: auto; display:block; overflow:visible; }
+.footer-logo {
+  width: 320px;
+  height: auto;
+  display:block;
+  filter: drop-shadow(6px 6px 12px rgba(0,0,0,0.35));
+  transform-origin: center;
+  animation: logoFloat 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Get in touch block */
+.get-in-touch { margin-top: 6px; color: #fff; }
+.get-title { font-weight:600; font-size:18px; margin-bottom:8px; }
+
+/* social icons row */
+.social-icons { display:flex; gap:12px; align-items:center; }
+.social-icons .social { display:inline-block; width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.07); padding:6px; transition: transform .28s ease, box-shadow .28s ease; }
+.social-icons .social img { width:100%; height:100%; object-fit:contain; display:block; }
+.social-icons .social:hover { transform: translateY(-6px) scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.32); }
+
+/* -------- COL 2: Quick links -------- */
+.fcol-links .footer-nav ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:14px; }
+.fcol-links .footer-nav a {
+  color:#dff5f6; text-decoration:none; font-weight:600; font-size:18px;
+  transition: color .22s ease, transform .22s ease;
+}
+.fcol-links .footer-nav a:hover { color:#fff; transform: translateX(6px); }
+
+/* -------- COL 3: Categories + carousel -------- */
+.fcol-cats .cats-and-carousel { display:flex; gap:18px; align-items:center; }
+.cats-list ul { list-style:none; margin:0; padding:0; color:#d6f7f8; font-weight:600; }
+.cats-list ul li { margin:8px 0; font-size:16px; }
+
+/* bike carousel container */
+.bike-carousel {
+  width: 270px;
+  height: 170px;
+  position: relative;
+  border-radius: 26px;
+  overflow: visible;
+  display:flex; align-items:center; justify-content:center;
+  padding: 6px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  box-shadow: 0 12px 36px rgba(0,0,0,0.35);
+}
+.bike-slide {
+  position: absolute;
+  inset: 0;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0;
+  transform: scale(.96) translateY(6px);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.2,.9,.3,1);
+}
+.bike-slide img { width: 260px; max-height: 160px; object-fit:contain; display:block; filter: drop-shadow(0 18px 30px rgba(0,0,0,0.35)); }
+.bike-slide.active { opacity:1; transform: scale(1) translateY(0); }
+
+/* -------- COL 4: Address & contact -------- */
+.fcol-address h4 { color:#e6fffe; font-size:20px; margin:0 0 8px; font-weight:700; }
+.fcol-address address { font-style:normal; color:#dff5f6; line-height:1.6; margin-bottom:12px; }
+.fcol-address a.map-link { color:#dff5f6; text-decoration:none; display:inline-block; }
+.footer-links { display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+.footer-links a { color:#fff; text-decoration:none; font-weight:600; }
+.footer-links a.site-link:hover, .footer-links a.phone-link:hover { text-decoration:underline; }
+
+/* bottom copyright */
+.footer-bottom { text-align:center; margin-top:20px; color:rgba(255,255,255,0.7); }
+
+/* -------- Animations -------- */
+@keyframes logoFloat {
+  0% { transform: translateY(0) rotate(-1deg) scale(1); }
+  50% { transform: translateY(-10px) rotate(0deg) scale(1.02); }
+  100% { transform: translateY(0) rotate(-1deg) scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .footer-inner { grid-template-columns: 1fr 1fr; gap:20px; }
+  .logo-wrap { width: 220px; }
+  .footer-logo { width:220px; }
+  .bike-carousel { width:220px; height:140px; }
+}
+@media (max-width:640px) {
+  .footer-inner { grid-template-columns: 1fr; gap:18px; text-align:center; }
+  .fcol-logo, .fcol-links, .fcol-cats, .fcol-address { align-items:center; }
+  .fcol-links .footer-nav a { font-size:16px; }
+}

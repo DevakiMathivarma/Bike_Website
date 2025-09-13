@@ -1,0 +1,167 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/css/home.css' %}">
+<script defer src="{% static 'core/js/home.js' %}"></script>
+
+<section class="hero container-xl">
+  <div class="hero-inner">
+    <!-- LEFT: content -->
+    <div class="hero-left">
+      <h1 class="hero-heading">
+        {% if page %}
+          {{ page.heading_html|safe }}
+        {% else %}
+          Buy or Sell Bikes the Smarter Way
+        {% endif %}
+      </h1>
+
+      <p class="hero-paragraph">
+        {% if page %}
+          {{ page.hero_paragraph }}
+        {% else %}
+          Skip the hassle. Discover verified secondhand bikes at great prices or list your own in minutes. We’re here to help you ride more, spend less, and keep bikes moving — from one happy rider to the next.
+        {% endif %}
+      </p>
+
+      <div class="hero-cta">
+        {% if page %}
+          <a class="btn primary" href="{{ page.hero_button_url|default:'#' }}">{{ page.hero_button_text }}</a>
+        {% else %}
+          <a class="btn primary" href="#">Buy Now</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- RIGHT: gradient background + images (carousel) -->
+    <div class="hero-right">
+      <div id="heroCarousel" class="hero-carousel" data-interval="{% if page %}{{ page.carousel_interval }}{% else %}3500{% endif %}">
+        {% if hero_images %}
+          {% for img in hero_images %}
+            <div class="slide{% if forloop.first %} active{% endif %}">
+              <img src="{{ img.image.url }}" alt="hero image {{ forloop.counter }}">
+            </div>
+          {% endfor %}
+        {% else %}
+          <!-- placeholder single image if none uploaded -->
+          <div class="slide active">
+            <img src="{% static 'core/images/hero-placeholder.jpg' %}" alt="placeholder">
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+<!-- fetaure section -->
+ 
+{% for f in features %}
+<section class="hp-feature-section container-xl" aria-labelledby="hp-feature-{{ forloop.counter }}">
+  <div class="hp-feature-inner">
+    <div class="hp-feature-left">
+      {% if f.image %}
+        <img src="{{ f.image.url }}" alt="{{ f.title|truncatechars:40 }}" class="hp-feature-img js-hp-img" />
+      {% else %}
+        <img src="{% static 'core/images/feature-placeholder.png' %}" alt="feature" class="hp-feature-img js-hp-img" />
+      {% endif %}
+    </div>
+
+    <div class="hp-feature-right js-hp-content" id="hp-feature-{{ forloop.counter }}">
+      <h2 class="hp-feature-title">{{ f.title }}</h2>
+      <p class="hp-feature-paragraph">{{ f.paragraph }}</p>
+      <a class="hp-feature-btn" href="{{ f.button_url|default:'#' }}">{{ f.button_text }}</a>
+    </div>
+  </div>
+</section>
+ 
+{% endfor %}
+<!-- support section -->
+{# support section #}
+{% if support_section %}
+<section class="hp-support-section container-xl" aria-labelledby="hp-support-heading">
+ <img src="{% static 'core\images\support.PNG' %}" alt="placeholder">
+</section>
+{% endif %}
+
+
+<!-- SECTION 1: Satisfied Customers -->
+<section class="satisfied-section">
+  <div class="satisfied-top">
+    <h2>{{ satisfied.heading }}</h2>
+    <img src="{{ satisfied.logo.url }}" alt="Logo">
+  </div>
+  <div class="satisfied-stats">
+    <div class="stat-card animate-flip">
+      <div>
+      <img src="{{ satisfied.stat1_icon.url }}" style="width: 100px;"alt=""></div>
+      <div>
+      <h3>{{ satisfied.stat1_number }}</h3>
+      <p>{{ satisfied.stat1_text }}</p>
+      </div>
+    </div>
+    <div class="stat-card animate-flip">
+      <div>
+      <img src="{{ satisfied.stat2_icon.url }}" alt=""></div>
+      <div>
+      <h3>{{ satisfied.stat2_number }}</h3>
+      <p>{{ satisfied.stat2_text }}</p>
+      </div>
+    </div>
+    <div class="stat-card animate-flip">
+      <div>
+        <img src="{{ satisfied.stat3_icon.url }}" alt="">
+
+      </div>
+      <div>
+      <h3>{{ satisfied.stat3_number }}</h3>
+      <p>{{ satisfied.stat3_text }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 2: Happy Customers -->
+<section class="happy-section">
+  <h2>Real Stories From our Happy Customer</h2>
+  <p class="subtitle">Their words drive us forward and inspire others to join the movement.</p>
+  <div class="happy-row">
+    {% for customer in happy_customers %}
+    <div class="happy-card animate-fade">
+      <img src="{{ customer.photo.url }}" alt="{{ customer.name }}">
+      <h3>{{ customer.name }} – <span>{{ customer.role }}</span></h3>
+      <p>{{ customer.feedback }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+
+<!-- SECTION 3: Trusted Riders -->
+<section class="trusted-section">
+  <div class="trusted-inner">
+    <div class="trusted-left animate-left">
+      <h2>{{ trusted.heading }}</h2>
+      <p>{{ trusted.subtext }}</p>
+    </div>
+    <div class="trusted-right animate-right">
+      <img src="{{ trusted.image.url }}" alt="Trusted Riders">
+    </div>
+  </div>
+</section>
+
+
+<!-- SECTION 4: FAQ -->
+<section class="faq-section">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-container">
+    {% for faq in faqs %}
+    <div class="faq-item">
+      <div class="faq-question">{{ faq.question }}</div>
+      <div class="faq-answer">{{ faq.answer }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

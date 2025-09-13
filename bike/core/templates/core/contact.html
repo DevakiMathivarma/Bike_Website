@@ -1,0 +1,86 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/css/contact.css' %}" />
+<script defer src="{% static 'core/js/contact.js' %}"></script>
+
+<section class="contact-section container-xl">
+  <h1 class="page-title">Contact Us</h1>
+
+  <div class="contact-grid">
+    <!-- LEFT: Form -->
+    <div class="contact-left">
+      <form id="contactForm" novalidate>
+        {% csrf_token %}
+        <div class="field-wrap">
+          <input type="text" id="name" name="name" placeholder="Name" autocomplete="name" />
+        </div>
+
+        <div class="field-wrap">
+          <input type="email" id="email" name="email" placeholder="E-mail Address" autocomplete="email" />
+        </div>
+
+        <div class="field-wrap">
+          <input type="tel" id="phone" name="phone" placeholder="Phone Number" inputmode="numeric" />
+        </div>
+
+        <div class="field-wrap">
+          <select id="reason" name="reason" aria-label="Reason to Contact">
+            <option value="" disabled selected>Reason to Contact</option>
+            <option>General Enquiry</option>
+            <option>Buy a Bike</option>
+            <option>Sell a Bike</option>
+            <option>Exchange a Bike</option>
+            <option>RTO Service</option>
+            <option>Others</option>
+          </select>
+        </div>
+
+        <div class="field-wrap">
+          <select id="channel" name="channel" aria-label="How did you find out about us?">
+            <option value="" disabled selected>How did you find out about us ?</option>
+            <option>OLX</option>
+            <option>Instagram</option>
+            <option>Youtube</option>
+            <option>Google</option>
+            <option>Website</option>
+            <option>Facebook</option>
+            <option>Walk - in</option>
+          </select>
+        </div>
+
+        <div class="field-wrap">
+          <textarea id="message" name="message" placeholder="Message" rows="6"></textarea>
+        </div>
+
+        <div class="field-wrap">
+          <button type="submit" id="submitBtn" class="primary-btn">Send</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- RIGHT: Map + Address -->
+    <aside class="contact-right" aria-label="Map and address">
+      <div class="map-wrap" role="img" aria-label="Drive RP map">
+        <!-- Replace the src with your actual Google Maps embed if you have one -->
+        <iframe class="map-frame"
+  src="https://www.google.com/maps?q=Chengalpattu,India&output=embed"
+  loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+      </div>
+
+      <div class="address-block">
+        <h3>Address:</h3>
+        <p class="addr-line">51, Rajaji Street,</p>
+        <p class="addr-line">GST Road,</p>
+        <p class="addr-line">Chengalpattu-603104,</p>
+        <p class="addr-line">TamilNadu, India.</p>
+
+        <p class="addr-link"><span class="icon">🌐</span> www.DriveRp.in</p>
+        <p class="addr-link"><span class="icon">📞</span> +91 987 952 1234</p>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

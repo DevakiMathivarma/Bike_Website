@@ -1,0 +1,231 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'core/css/bike_detail.css' %}">
+
+<div class="detail-wrapper container">
+    <div class="detail-grid">
+
+        <!-- LEFT: image + thumbs -->
+        <div class="left-col">
+            <div class="main-img" id="mainImageWrap">
+                {% if bike.main_image %}
+                <img id="mainBikeImage" src="{{ bike.main_image.url }}" alt="{{ bike.brand }} {{ bike.model }}">
+                {% else %}
+                <div class="no-image">No Image</div>
+                {% endif %}
+                <img class="logo-watermark" src="{% static 'core/images/logo.png' %}" alt="DriveRP logo">
+            </div>
+
+            <div class="thumbs-row" id="thumbsRow">
+                {% for t in thumbs %}
+                {% if t %}
+                <div class="thumb-item">
+                    <img src="{{ t.url }}" alt="thumb {{ forloop.counter }}" class="thumb" data-src="{{ t.url }}">
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- RIGHT: details, actions, overview -->
+        <aside class="right-col">
+            <div class="summary">
+                <h1 class="bike-title">{{ bike.make_year }} | {{ bike.brand }} {{ bike.model }} | {{ bike.variant }}
+                </h1>
+                <p class="meta-line">
+                    <span class="meta-km"> <img class="meta-icon" src="{% static 'core/images/km.png' %}" alt="km">
+                        {{ bike.kilometers }} Km</span>
+                    <span class="dot" aria-hidden="true">•</span>
+                    <span>{{ bike.fuel_type|capfirst }}</span>
+                    <span class="dot" aria-hidden="true">•</span>
+                    <span>{{ bike.previous_owner }} Owner</span>
+                </p>
+                <p class="location"><img src="{% static 'core/images/location.png' %}" class="loc-icon" alt="location">
+                    {{ bike.location }}</p>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn primary" id="openTestRideBtn">Book Test Ride (₹1000)</button>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'bike-payment' bike.pk %}" class="btn outline" role="button">Buy Now</a>
+                {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn outline" role="button">Login to Buy</a>
+                {% endif %}
+            </div>
+
+
+        </aside>
+    </div>
+
+    <!-- Bike Overview (table-like card) -->
+    <div class="overview-card">
+        <h3>Bike Overview</h3>
+        <div class="overview-grid">
+            <div class="col">
+                <div class="ov-row">
+                    <div class="ov-key">Bike Brand</div>
+                    <div class="ov-val">{{ bike.brand }}</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">Bike Model</div>
+                    <div class="ov-val">{{ bike.model }}</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">Bike Variant</div>
+                    <div class="ov-val">{{ bike.variant }}</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">Make Year</div>
+                    <div class="ov-val">{{ bike.make_year }}</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">RTO City</div>
+                    <div class="ov-val">{{ bike.rto_city }}</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">Transmission</div>
+                    <div class="ov-val">{{ bike.transmission }}</div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="ov-row">
+                    <div class="ov-key">Refurbished</div>
+                    <div class="ov-val">{% if bike.refurbished %}Yes{% else %}No{% endif %}</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">Kilometers</div>
+                    <div class="ov-val">{{ bike.kilometers }} Km</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">Registration Cert.</div>
+                    <div class="ov-val">{% if bike.registration_certificate %}Yes{% else %}-{% endif %}</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">RTO State</div>
+                    <div class="ov-val">{{ bike.rto_state }}</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">Owners</div>
+                    <div class="ov-val">{{ bike.previous_owner }}</div>
+                </div>
+                <div class="ov-row">
+                    <div class="ov-key">Fuel Type</div>
+                    <div class="ov-val">{{ bike.fuel_type }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Book Test Ride Modal (form posts to book_test_ride URL) -->
+    <div id="testDriveModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal-panel">
+            <button type="button" class="modal-close" id="td-close" aria-label="Close">×</button>
+            <h2>Book Test Drive</h2>
+            <p>Booking fee <strong>₹1000</strong> (refundable). We'll contact you to confirm the slot.</p>
+
+            <form id="testRideForm" method="post" action="{% url 'book-test-ride' bike.pk %}">
+                {% csrf_token %}
+                <div class="form-row">
+                    <label for="td-phone">Phone (optional)</label>
+                    <input id="td-phone" name="phone" type="tel" placeholder="Enter phone">
+                </div>
+
+                <div class="form-row">
+                    <label for="td-schedule">Preferred date & time (optional)</label>
+                    <input id="td-schedule" name="scheduled_for" type="datetime-local">
+                </div>
+
+                <div class="form-row">
+                    <label for="td-notes">Notes (optional)</label>
+                    <textarea id="td-notes" name="notes" rows="2"></textarea>
+                </div>
+
+                <div id="td-feedback" class="form-feedback" aria-live="polite"></div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn secondary" id="td-cancel">Cancel</button>
+                    {% if user.is_authenticated %}
+                    <button id="td-submit" type="submit" class="btn primary">Confirm & Pay ₹1000</button>
+                    {% else %}
+                    <a class="btn primary" href="{% url 'login' %}?next={{ request.path }}">Login to Book</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success modal (reused) -->
+    <div id="successModal" class="modal success-modal" aria-hidden="true">
+        <div class="modal-panel success">
+            <img src="{% static 'core\images\bike-biker.gif' %}" alt="success" class="success-illustration">
+            <h3>Booking Confirmed</h3>
+            <p>The bike is yours — enjoy your journey!</p>
+            <button class="btn primary" id="successOk">OK</button>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- 3 steps -->
+<section class="three-steps container">
+    <h3>Book This Bike in 3 Easy Steps</h3>
+    <div class="steps">
+        <div class="step">
+            <img src="{% static 'core/images/choose.PNG' %}" alt="">
+            <p>Choose Your Bike</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+            <img src="{% static 'core/images/choose1.PNG' %}" alt="">
+            <p>Book & Take Test ride</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+            <img src="{% static 'core/images/choose2.PNG' %}" alt="">
+            <p>Payment & Immediate Delivery</p>
+        </div>
+    </div>
+</section>
+
+<!-- Bike Specification -->
+<section class="specs container">
+    <h3>Bike Specification</h3>
+    <div class="spec-grid">
+        <div><strong>Type</strong>
+            <div>{{ bike.category|capfirst }}</div>
+        </div>
+        <div><strong>Color</strong>
+            <div>{{ bike.bike_color }}</div>
+        </div>
+        <div><strong>Fuel Type</strong>
+            <div>{{ bike.fuel_type|capfirst }}</div>
+        </div>
+        <div><strong>Ignition Type</strong>
+            <div>{{ bike.ignition_type }}</div>
+        </div>
+        <div><strong>Transmission</strong>
+            <div>{{ bike.transmission }}</div>
+        </div>
+        <div><strong>Front Brake Type</strong>
+            <div>{{ bike.front_brake_type }}</div>
+        </div>
+        <div><strong>Rear Brake Type</strong>
+            <div>{{ bike.rear_brake_type }}</div>
+        </div>
+        <div><strong>ABS</strong>
+            <div>{% if bike.abs_available %}Yes{% else %}No{% endif %}</div>
+        </div>
+        <div><strong>Odometer</strong>
+            <div>{{ bike.odometer_type }}</div>
+        </div>
+        <div><strong>Wheel type</strong>
+            <div>{{ bike.wheel_type }}</div>
+        </div>
+    </div>
+</section>
+<script src="{% static 'core/js/bike_detail.js' %}"></script>
+{% endblock %}

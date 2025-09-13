@@ -1,0 +1,102 @@
+/* bike_payment.css - payment UI (fixed modal visibility & right-side radio style) */
+
+.payment-container { 
+  display:flex; 
+  justify-content:space-between; 
+  gap:30px; 
+  padding:30px; 
+  align-items:flex-start;
+}
+
+.payment-left, .payment-right { 
+  flex:1; 
+  background:#fff; 
+  padding:24px; 
+  border-radius:12px; 
+  box-shadow:0 8px 30px rgba(2,10,30,0.06); 
+}
+
+/* left payment list */
+.pm-row{ margin-bottom:8px; }
+.pm-label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;   /* text left, control right */
+  gap:12px;
+  padding:14px;
+  border-radius:10px;
+  cursor:pointer;
+  border:1px solid rgba(10,20,30,0.04);
+  transition: box-shadow .15s ease, transform .12s;
+}
+.pm-label:hover{ box-shadow:0 12px 30px rgba(11,95,165,0.06); transform:translateY(-3px); }
+
+.pm-text{ display:flex; align-items:center; gap:12px; font-weight:700; color:#0f172a; }
+.pm-text .icon{ width:26px; height:26px; display:inline-block; object-fit:contain; }
+
+/* hide native radio but keep it accessible */
+.pm-radio{ position:absolute; opacity:0; pointer-events:none; }
+
+/* custom circle on right */
+.pm-control{ display:flex; align-items:center; gap:10px; }
+.pm-circle{
+  width:34px; height:34px; border-radius:50%;
+  border:3px solid rgba(11,95,165,0.32);
+  display:inline-block; box-sizing:border-box;
+  background: #fff;
+  transition: all .14s ease;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* checked state - when the input is checked, style the circle
+   We rely on JS to add class 'checked' to the label when selected. */
+.pm-label.checked .pm-circle{
+  background: linear-gradient(180deg,#0b5fa5,#0a7ab0);
+  border-color: rgba(6,60,100,0.95);
+  box-shadow: 0 8px 28px rgba(11,95,165,0.18);
+}
+
+/* Right summary */
+.payment-right h3{ margin-top:0; font-size:20px; color:#0f172a; }
+.payment-right p{ margin:8px 0; color:#234; font-weight:600; }
+.payment-right h4{ margin-top:16px; font-size:18px; }
+
+/* confirm button */
+.payment-actions{ margin-top:18px; display:flex; justify-content:flex-end; }
+.confirm-btn{ background:#0b5fa5; color:#fff; padding:12px 22px; border:none; border-radius:22px; cursor:pointer; font-weight:800; box-shadow:0 12px 30px rgba(11,95,165,0.12); }
+
+/* Animations */
+.slide-in-left { animation: slideLeft .48s cubic-bezier(.2,.9,.2,1) both; }
+.slide-in-right { animation: slideRight .48s cubic-bezier(.2,.9,.2,1) both; }
+@keyframes slideLeft { from{transform:translateX(-20px);opacity:0;} to{transform:translateX(0);opacity:1;} }
+@keyframes slideRight { from{transform:translateX(20px);opacity:0;} to{transform:translateX(0);opacity:1;} }
+
+/* Success Popup - hidden by default */
+.modal { 
+  display: none;          /* IMPORTANT: keep hidden by default */
+  position: fixed; 
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9999;
+  justify-content: center; 
+  align-items: center;
+}
+
+/* content */
+.modal-content.success { 
+  background:#fff; 
+  padding:26px 30px; 
+  border-radius:12px; 
+  text-align:center; 
+  width:420px;
+  box-shadow:0 28px 80px rgba(2,10,30,0.28);
+}
+
+/* success image */
+.success-illustration{ width:96px; height:96px; object-fit:contain; margin-bottom:8px; }
+
+/* small responsive */
+@media (max-width:900px){
+  .payment-container{ flex-direction:column; }
+  .payment-left,.payment-right{ width:100%; }
+}
