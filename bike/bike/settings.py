@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 ]
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
