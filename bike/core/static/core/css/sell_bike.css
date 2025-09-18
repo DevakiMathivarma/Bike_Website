@@ -272,9 +272,13 @@
   background:#fff;
   padding:18px;
   border-radius:12px;
-  width:220px;
+  width:290px;
   text-align:center;
   box-shadow:0 8px 22px rgba(2,10,30,0.06);
+}
+.hiw-card img{
+  width:100%;
+
 }
 .hiw-arrow{
   font-size:40px;
